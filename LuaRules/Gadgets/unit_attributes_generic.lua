@@ -73,7 +73,7 @@ GG.att_ReloadChange = {}
 GG.att_MoveChange = {}
 GG.att_RangeChange = {}
 GG.att_JumpRangeChange = {}
-GG.att_DeathExplodeMult = {}
+-- GG.att_DeathExplodeMult = {}
 GG.att_ProjSpeed = {}
 GG.att_ProjMult = {}
 GG.att_DamageMult = {}
@@ -482,40 +482,40 @@ end
 --------------------------------------------------------------------------------
 -- Death Explosion Handling
 
-local explosionDefID = {}
-local explosionRadius = {}
-local function AddExplosions(unitID, unitDefID, teamID, expMult)
-	if expMult <= 1 then -- Unsupported
-		return
-	end
-	local extraExplosions = math.max(1, math.floor(expMult - 0.5))
-	local explosionDamageMult = extraExplosions / (expMult - 1)
-	if not explosionDefID[unitDefID] then
-		local wd = WeaponDefNames[UnitDefs[unitDefID].deathExplosion]
-		explosionDefID[unitDefID] = wd.id
-		explosionRadius[unitDefID] = wd.damageAreaOfEffect or 0
-	end
-	local _, _, _, ux, uy, uz = Spring.GetUnitPosition(unitID, true)
-	local projectileParams = {
-		pos = {ux, uy, uz},
-		["end"] = {ux, uy - 1, uz},
-		owner = unitID,
-		team = teamID,
-		ttl = 0,
-	}
-	local expLevel = 1 + math.log(expMult) / math.log(2)
-	local radius = (5 + 15*expLevel)*(50 + math.pow(explosionRadius[unitDefID], 0.8))/100
-	for i = 1, extraExplosions do
-		local rand = Vector.RandomPointInCircle(radius)
-		projectileParams.pos[1] = ux + rand[1]
-		projectileParams.pos[3] = uz + rand[2]
-		local proID = Spring.SpawnProjectile(explosionDefID[unitDefID], projectileParams)
-		-- TODO: Handle explosionDamageMult ~= 1 with SetProjectileDamages
-		if proID then
-			Spring.SetProjectileCollision(proID)
-		end
-	end
-end
+-- local explosionDefID = {}
+-- local explosionRadius = {}
+-- local function AddExplosions(unitID, unitDefID, teamID, expMult)
+-- 	if expMult <= 1 then -- Unsupported
+-- 		return
+-- 	end
+-- 	local extraExplosions = math.max(1, math.floor(expMult - 0.5))
+-- 	local explosionDamageMult = extraExplosions / (expMult - 1)
+-- 	if not explosionDefID[unitDefID] then
+-- 		local wd = WeaponDefNames[UnitDefs[unitDefID].deathExplosion]
+-- 		explosionDefID[unitDefID] = wd.id
+-- 		explosionRadius[unitDefID] = wd.damageAreaOfEffect or 0
+-- 	end
+-- 	local _, _, _, ux, uy, uz = Spring.GetUnitPosition(unitID, true)
+-- 	local projectileParams = {
+-- 		pos = {ux, uy, uz},
+-- 		["end"] = {ux, uy - 1, uz},
+-- 		owner = unitID,
+-- 		team = teamID,
+-- 		ttl = 0,
+-- 	}
+-- 	local expLevel = 1 + math.log(expMult) / math.log(2)
+-- 	local radius = (5 + 15*expLevel)*(50 + math.pow(explosionRadius[unitDefID], 0.8))/100
+-- 	for i = 1, extraExplosions do
+-- 		local rand = Vector.RandomPointInCircle(radius)
+-- 		projectileParams.pos[1] = ux + rand[1]
+-- 		projectileParams.pos[3] = uz + rand[2]
+-- 		local proID = Spring.SpawnProjectile(explosionDefID[unitDefID], projectileParams)
+-- 		-- TODO: Handle explosionDamageMult ~= 1 with SetProjectileDamages
+-- 		if proID then
+-- 			Spring.SetProjectileCollision(proID)
+-- 		end
+-- 	end
+-- end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -589,7 +589,7 @@ local function CleanupAttributeDataForUnit(unitID)
 	GG.att_MoveChange[unitID] = nil
 	GG.att_RangeChange[unitID] = nil
 	GG.att_JumpRangeChange[unitID] = nil
-	GG.att_DeathExplodeMult[unitID] = nil
+	-- GG.att_DeathExplodeMult[unitID] = nil
 	GG.att_ProjSpeed[unitID] = nil
 	GG.att_ProjMult[unitID] = nil
 	GG.att_DamageMult[unitID] = nil
@@ -620,7 +620,7 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 	local reloadMult = 1
 	local rangeMult = 1
 	local jumpRangeMult = 1
-	local deathExplodeMult = 1
+	-- local deathExplodeMult = 1
 	local projSpeedMult = 1
 	local econMult = 1
 	local massMult = 1
@@ -664,7 +664,7 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 			turnMult = turnMult*(data.turn and data.turn[unitID] or (data.move and data.move[unitID]) or 1)
 			accelMult = accelMult*(data.accel and data.accel[unitID] or (data.move and data.move[unitID]) or 1)
 			jumpRangeMult = jumpRangeMult*(data.jumpRange and data.jumpRange[unitID] or 1)
-			deathExplodeMult = deathExplodeMult*(data.deathExplode and data.deathExplode[unitID] or 1)
+			-- deathExplodeMult = deathExplodeMult*(data.deathExplode and data.deathExplode[unitID] or 1)
 			
 			shieldRegen = shieldRegen*(data.shieldRegen and data.shieldRegen[unitID] or 1)
 			shieldMaxMult = shieldMaxMult*(data.shieldMax and data.shieldMax[unitID] or 1)
@@ -728,7 +728,7 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 	spSetUnitRulesParam(unitID, "rangeMult", rangeMult, INLOS_ACCESS)
 	spSetUnitRulesParam(unitID, "senseMult", senseMult, INLOS_ACCESS)
 	spSetUnitRulesParam(unitID, "jumpRangeMult", jumpRangeMult, INLOS_ACCESS)
-	spSetUnitRulesParam(unitID, "deathExplodeMult", deathExplodeMult, INLOS_ACCESS)
+	-- spSetUnitRulesParam(unitID, "deathExplodeMult", deathExplodeMult, INLOS_ACCESS)
 	
 	spSetUnitRulesParam(unitID, "totalStaticBuildpowerMult", staticBuildpowerMult, INLOS_ACCESS)
 	spSetUnitRulesParam(unitID, "totalStaticMetalMult", staticMetalMult, INLOS_ACCESS)
@@ -747,7 +747,7 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 	GG.att_MoveChange[unitID] = moveMult
 	GG.att_RangeChange[unitID] = rangeMult
 	GG.att_JumpRangeChange[unitID] = jumpRangeMult
-	GG.att_DeathExplodeMult[unitID] = deathExplodeMult
+	-- GG.att_DeathExplodeMult[unitID] = deathExplodeMult
 	GG.att_RegenChange[unitID] = healthRegen
 	GG.att_ShieldRegenChange[unitID] = shieldRegen
 	GG.att_ShieldMaxMult[unitID] = shieldMaxMult
@@ -993,14 +993,14 @@ function gadget:GameFrame(f)
 end
 
 function gadget:UnitDestroyed(unitID, unitDefID, teamID)
-	if (GG.att_DeathExplodeMult[unitID] or 1) ~= 1 then
-		if GG.MorphDestroy ~= unitID then
-			local _,_,_,_,build  = Spring.GetUnitHealth(unitID)
-			if build and build >= 0.8 then
-				AddExplosions(unitID, unitDefID, teamID, GG.att_DeathExplodeMult[unitID])
-			end
-		end
-	end
+	-- if (GG.att_DeathExplodeMult[unitID] or 1) ~= 1 then
+	-- 	if GG.MorphDestroy ~= unitID then
+	-- 		local _,_,_,_,build  = Spring.GetUnitHealth(unitID)
+	-- 		if build and build >= 0.8 then
+	-- 			AddExplosions(unitID, unitDefID, teamID, GG.att_DeathExplodeMult[unitID])
+	-- 		end
+	-- 	end
+	-- end
 	Attributes.RemoveUnit(unitID)
 end
 
