@@ -544,7 +544,7 @@ local currentProjectiles = {}
 local currentDamage = {}
 local currentMinSpray = {}
 local currentShieldDisabled = {}
-local currentAbilityDisabled = {}
+local currentAbilityDisabled_ = {}
 
 local currentSense = {}
 local currentSetRadar = {}
@@ -573,7 +573,7 @@ local function CleanupAttributeDataForUnit(unitID)
 	currentDamage[unitID] = nil
 	currentMinSpray[unitID] = nil
 	currentShieldDisabled[unitID] = nil
-	currentAbilityDisabled[unitID] = nil
+	currentAbilityDisabled_[unitID] = nil
 	
 	currentSense[unitID] = nil
 	currentSetRadar[unitID] = nil
@@ -773,7 +773,7 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 		or (currentAccel[unitID] or 1) ~= accelMult
 	
 	local senseChanges = (currentSense[unitID] ~= senseMult)
-		or (abilityDisabled ~= currentAbilityDisabled[unitID])
+		or (abilityDisabled ~= currentAbilityDisabled_[unitID])
 		or (setRadar ~= (currentSetRadar[unitID] or false))
 		or (setSonar ~= (currentSetSonar[unitID] or false))
 		or (setJammer ~= (currentSetJammer[unitID] or false))
@@ -815,10 +815,10 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 		currentEcon[unitID] = econMult
 	end
 	
-	if abilityDisabled ~= currentAbilityDisabled[unitID] then
-		spSetUnitRulesParam(unitID, "att_abilityDisabled", abilityDisabled and 1 or 0)
-		currentAbilityDisabled[unitID] = abilityDisabled
-	end
+	-- if abilityDisabled ~= currentAbilityDisabled[unitID] then
+	-- 	spSetUnitRulesParam(unitID, "att_abilityDisabled", abilityDisabled and 1 or 0)
+	-- 	currentAbilityDisabled[unitID] = abilityDisabled
+	-- end
 	
 	if shieldDisabled ~= currentShieldDisabled[unitID] then
 		spSetUnitRulesParam(unitID, "att_shieldDisabled", shieldDisabled and 1 or 0)
