@@ -1,0 +1,23 @@
+
+return {
+    ---@type AttributesHandlerFactory
+    AbilityDisabled = {
+        handledAttributeNames={},
+        new = function(unitID, unitDefID)
+
+            return {
+                newDataHandler = function(frame)
+
+                    return {
+                        fold = function(data)
+                        end,
+                        apply = function()
+                        end
+                    }
+                end,
+                clear = function()
+                end
+            }
+        end
+    }
+}
