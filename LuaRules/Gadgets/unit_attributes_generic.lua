@@ -81,23 +81,23 @@ GG.att_RegenChange = {}
 GG.att_ShieldRegenChange = {}
 GG.att_ShieldMaxMult = {}
 GG.att_StaticBuildRateMult = {}
-GG.attRaw_BuildSpeed = {} -- A build speed value rather than a multiplier
+-- GG.attRaw_BuildSpeed = {} -- A build speed value rather than a multiplier
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 -- UnitDefs caching
 
 local shieldWeaponDef = {}
-local buildSpeedDef = {}
+-- local buildSpeedDef = {}
 
 for i = 1, #UnitDefs do
 	local ud = UnitDefs[i]
 	if ud.shieldWeaponDef then
 		shieldWeaponDef[i] = true
 	end
-	if (ud.buildSpeed or 0) ~= 0 then
-		buildSpeedDef[i] = ud.buildSpeed
-	end
+	-- if (ud.buildSpeed or 0) ~= 0 then
+	-- 	buildSpeedDef[i] = ud.buildSpeed
+	-- end
 end
 
 --------------------------------------------------------------------------------
@@ -145,18 +145,18 @@ end
 
 local REPAIR_ENERGY_COST_FACTOR = Game.repairEnergyCostFactor
 
-local function UpdateBuildSpeed(unitID, unitDefID, speedFactor)
-	local buildSpeed = (buildSpeedDef[unitDefID] or 0)
-	if buildSpeed == 0 then
-		return
-	end
-	GG.attRaw_BuildSpeed[unitID] = buildSpeed*speedFactor
-	spSetUnitBuildSpeed(unitID,
-		buildSpeed*speedFactor, -- build
-		buildSpeed*speedFactor / REPAIR_ENERGY_COST_FACTOR, -- repair
-		buildSpeed*speedFactor, -- reclaim
-		0.5*buildSpeed*speedFactor) -- rezz
-end
+-- local function UpdateBuildSpeed(unitID, unitDefID, speedFactor)
+-- 	local buildSpeed = (buildSpeedDef[unitDefID] or 0)
+-- 	if buildSpeed == 0 then
+-- 		return
+-- 	end
+-- 	GG.attRaw_BuildSpeed[unitID] = buildSpeed*speedFactor
+-- 	spSetUnitBuildSpeed(unitID,
+-- 		buildSpeed*speedFactor, -- build
+-- 		buildSpeed*speedFactor / REPAIR_ENERGY_COST_FACTOR, -- repair
+-- 		buildSpeed*speedFactor, -- reclaim
+-- 		0.5*buildSpeed*speedFactor) -- rezz
+-- end
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -538,7 +538,7 @@ local currentProjSpeed = {}
 local currentEcon = {}
 local currentMass = {}
 local currentEnergy = {}
-local currentBuildpower = {}
+-- local currentBuildpower = {}
 local currentCost = {}
 local currentProjectiles = {}
 local currentDamage = {}
@@ -567,7 +567,7 @@ local function CleanupAttributeDataForUnit(unitID)
 	currentEcon[unitID] = nil
 	currentMass[unitID] = nil
 	currentEnergy[unitID] = nil
-	currentBuildpower[unitID] = nil
+	-- currentBuildpower[unitID] = nil
 	currentCost[unitID] = nil
 	currentProjectiles[unitID] = nil
 	currentDamage[unitID] = nil
@@ -629,7 +629,7 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 	local shieldMaxMult = 1
 	local healthRegen = 1
 	local costMult = 1
-	local buildMult = 1
+	-- local buildMult = 1
 	local senseMult = 1
 	local projectilesMult = 1
 	local damageMult = 1
@@ -671,7 +671,7 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 			
 			energyMult = energyMult*(data.energy and data.energy[unitID] or 1)
 			econMult = econMult*(data.econ and data.econ[unitID] or 1)
-			buildMult = buildMult*(data.build and data.build[unitID] or 1)
+			-- buildMult = buildMult*(data.build and data.build[unitID] or 1)
 			
 			abilityDisabled = abilityDisabled or data.abilityDisabled and data.abilityDisabled[unitID]
 			shieldDisabled = shieldDisabled or data.shieldDisabled and data.shieldDisabled[unitID]
@@ -719,7 +719,7 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 	
 	spSetUnitRulesParam(unitID, "totalReloadSpeedChange", reloadMult, INLOS_ACCESS)
 	spSetUnitRulesParam(unitID, "totalEconomyChange", econMult, INLOS_ACCESS)
-	spSetUnitRulesParam(unitID, "totalBuildPowerChange", buildMult, INLOS_ACCESS)
+	-- spSetUnitRulesParam(unitID, "totalBuildPowerChange", buildMult, INLOS_ACCESS)
 	spSetUnitRulesParam(unitID, "totalMoveSpeedChange", moveMult, INLOS_ACCESS)
 	spSetUnitRulesParam(unitID, "costMult", costMult, INLOS_ACCESS)
 	spSetUnitRulesParam(unitID, "projectilesMult", projectilesMult, INLOS_ACCESS)
@@ -805,10 +805,10 @@ local function UpdateUnitAttributes(unitID, attTypeMap)
 		currentMinSpray[unitID] = minSpray
 	end
 	
-	if buildMult ~= currentBuildpower[unitID] then
-		UpdateBuildSpeed(unitID, unitDefID, buildMult)
-		currentBuildpower[unitID] = buildMult
-	end
+	-- if buildMult ~= currentBuildpower[unitID] then
+	-- 	UpdateBuildSpeed(unitID, unitDefID, buildMult)
+	-- 	currentBuildpower[unitID] = buildMult
+	-- end
 	
 	if econMult ~= currentEcon[unitID] then
 		UpdateEconomy(unitID, unitDefID, econMult, energyMult)
